@@ -1,4 +1,4 @@
-Date,Text Date,State,Deaths,Deaths in Month,% Change
+Date,Text_Date,State,Deaths,Deaths_in_Month,Percent_Change
 4/1/2020,2020 Mar,Texas,65,65,--
 5/1/2020,2020 Apr,Texas,853,788,1112.307692
 6/1/2020,2020 May,Texas,1695,842,6.852791878

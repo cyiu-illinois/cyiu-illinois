@@ -1,4 +1,4 @@
-Date,Text Date,State,Deaths,Deaths in Month,% Change
+Date,Text_Date,State,Deaths,Deaths_in_Month,Percent_Change
 4/1/2020,2020 Mar,Florida,100,100,--
 5/1/2020,2020 Apr,Florida,1313,1213,1113
 6/1/2020,2020 May,Florida,2459,1146,-5.523495466

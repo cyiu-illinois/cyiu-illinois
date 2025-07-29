@@ -1,4 +1,4 @@
-Date,Text Date,State,Deaths,Deaths in Month,% Change
+Date,Text_Date,State,Deaths,Deaths_in_Month,Percent_Change
 4/1/2020,2020 Mar,New York,2415,2415,--
 5/1/2020,2020 Apr,New York,23841,21426,787.2049689
 6/1/2020,2020 May,New York,29766,5925,-72.3466816
