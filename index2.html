@@ -14,9 +14,10 @@
     <p id="text-content" style="text-align:left; width:800px; height:150px">
         The first case of COVID-19 hit Illinois in February 2020 and the first deaths were in March.  
         By May of that year, a first wave had peaked, which we will define for our purposes as a rise followed by a reduction 
-        in number of deaths by at least 20% relative to the previous month and a drop of at least 250 in absolute terms.    </p>
+        in number of deaths by at least 20% relative to the previous month and a drop of at least 250 in absolute terms.  
+        The highest peak across the 3 years of data reported by the Washington Post occurred in December of 2020.</p>
     <div class="controls">
-        <a class="button disabled">&lt;</a> <a class="button" href="index2.html">&gt;</a>
+        <a class="button" href="index.html">&lt;</a> <a class="button" href="index3.html">&gt;</a>
     </div>
     <svg width="600" height="300"></svg>
     </div>
@@ -29,7 +30,7 @@
             const parseDate = d3.timeParse("%Y %b");
             const dateFormat = d3.timeFormat("%Y %b");
             var margin = 50, width = 600 - 2 * margin, height = 300 - 2 * margin;
-            const data = await d3.csv('https://cyiu-illinois.github.io/data/ILMonthlyP1.csv');
+            const data = await d3.csv('https://cyiu-illinois.github.io/data/ILMonthlyP2.csv');
 
             var xScale = d3.scaleTime()
               .domain([parseDate("2020 Mar"), parseDate("2023 Feb")] )
@@ -68,7 +69,19 @@
                 dy: -30,
                 dx: 0,
                 subject: { radius: 10, radiusPadding: 0 },
-             }];
+             },{
+                note: {
+                  label: "Dec 2020: 4804",
+                  bgPadding: 2,
+                  title: "Highest Peak"
+                },
+                x: 179,
+                y: 212,
+                className: "show-bg",
+                dy: -30,
+                dx: 0,
+                subject: { radius: 10, radiusPadding: 0 },
+              }];
       
              const makeAnnotations = d3.annotation()
                 .editMode(false)
