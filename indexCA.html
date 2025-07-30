@@ -42,7 +42,7 @@
             const parseDate = d3.timeParse("%Y %b");
             const dateFormat = d3.timeFormat("%Y %b");
             var margin = 50, width = 600 - 2 * margin, height = 300 - 2 * margin;
-            const data = await d3.csv('https://cyiu-illinois.github.io/data/ILMonthly.csv');
+            const data = await d3.csv('https://cyiu-illinois.github.io/data/CAMonthly.csv');
 
             var xScale = d3.scaleTime()
               .domain([parseDate("2020 Mar"), parseDate("2023 Feb")] )
