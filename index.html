@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="src/style.css" />
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js" integrity="sha512-iBAeBWWWFb8HqSBcrqcz98iIpuVH1la39dEYHtyQ/pGpeCQTQVvLJOWAuhv2Q7JSHp9k7hWA7sGxU3hHJe+tFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <title>Narrative Visualization for CS416</title>
   </head>
   <body onload="init()">
@@ -35,7 +36,7 @@
             const dateFormat = d3.timeFormat("%Y %b");
             var margin = 50, width = 600 - 2 * margin, height = 300 - 2 * margin;
             const data = await d3.csv('https://cyiu-illinois.github.io/data/ILMonthlyP1.csv');
-            console.log("extent", d3.extent(data, function(d) { return parseDate(d.Text_Date); }))
+
             var xScale = d3.scaleTime()
               .domain([parseDate("2020 Mar"), parseDate("2023 Feb")] )
               .range([ 0, width ]);
