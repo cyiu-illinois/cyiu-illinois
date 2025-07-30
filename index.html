@@ -1,7 +1,46 @@
-<html>
-<head>
-<title>Narrative Visualization</title>
-<body>
-placeholder
-</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/style.css" />
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>Narrative Visualization for CS416</title>
+  </head>
+  <body onload="init()">
+    <svg width="600" height="300"></svg>
+
+    <script>
+          var sceneNum = 1;
+          async function init() {
+            const parseDate = d3.timeParse("%Y %b");
+            const dateFormat = d3.timeFormat("%Y %b");
+            var margin = 50, width = 600 - 2 * margin, height = 300 - 2 * margin;
+            const data = await d3.csv('https://cyiu-illinois.github.io/data/ILMonthlyP1.csv');
+            console.log("extent", d3.extent(data, function(d) { return parseDate(d.Text_Date); }))
+            var xScale = d3.scaleTime()
+              .domain([parseDate("2020 Mar"), parseDate("2023 Feb")] )
+              .range([ 0, width ]);
+            var yScale = d3.scaleLinear().domain([0, 25000]).range([height ,0]);
+
+              d3.select('svg').append('g')
+                .attr('transform', 'translate(' + margin + ',' + margin + ')')
+                .datum(data)
+                .append("path")
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 1.5)
+                .attr("d",
+                  d3.line()
+                    .x(function (d) {return xScale(parseDate(d.Text_Date))})
+                    .y(function (d) {return yScale(d.Deaths_in_Month)})
+                )
+
+              d3.select('svg').append('g').attr('transform','translate(' + margin + ',' + margin + ')')
+                .call(d3.axisLeft(yScale).tickValues(d3.range(0, 25001, 5000)));
+              d3.select('svg').append('g').attr('transform','translate(' + margin + ',' + (height + margin) + ')')
+                .call(d3.axisBottom(xScale).ticks(d3.timeMonth.every(12)).tickFormat(d3.timeFormat("%Y-%b")));
+            }
+    </script>
+  </body>
 </html>
