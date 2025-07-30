@@ -65,7 +65,7 @@
               d3.select('svg').append('g').attr('transform','translate(' + margin + ',' + margin + ')')
                 .call(d3.axisLeft(yScale).tickValues(d3.range(0, 25001, 5000)));
               d3.select('svg').append('g').attr('transform','translate(' + margin + ',' + (height + margin) + ')')
-                .call(d3.axisBottom(xScale).ticks(d3.timeMonth.every(12)).tickFormat(d3.timeFormat("%Y-%b")));
+                .call(d3.axisBottom(xScale).ticks(d3.timeMonth.every(6)).tickFormat(d3.timeFormat("%Y-%b")));
 
               const type = d3.annotationCalloutCircle;
 
@@ -78,7 +78,7 @@
                 x: 122,
                 y: 220,
                 className: "show-bg",
-                dy: 40,
+                dy: 45,
                 dx: -1,
                 subject: { radius: 10, radiusPadding: 0 }
              },{
@@ -95,7 +95,7 @@
                 subject: { radius: 10, radiusPadding: 0 }
               },{
                 note: {
-                  label: "Aug 2022: 1366",
+                  label: "Nov 2022: 2947",
                   bgPadding: 2,
                   title: "Last Peak"
                 },
