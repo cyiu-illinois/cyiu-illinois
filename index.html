@@ -11,26 +11,20 @@
   <body onload="init()">
     <div style="display: flex; flex-direction: column; align-items: center;">
     <h2>Trends in COVID-19 death data</h2>
-    <p id="text-content" style="text-align:left; width:800px; height:100px"></p>
+    <p id="text-content" style="text-align:left; width:800px; height:100px">
+        The first case of COVID-19 hit Illinois in February 2020 and the first deaths were in March.  
+        By May of that year, a first wave had peaked, which we will define for our purposes as a rise followed by a drop 
+        in deaths of at least 20% relative to the previous month.    </p>
     <div class="controls">
         <form><button>&lt;</button><button>&gt;</button></form>
     </div>
-    <h4 id="state-name"></h4>
     <svg width="600" height="300"></svg>
     </div>
 
 
     <script>
-        function loadText(sceneNum, stateAbbr) {
-        if (sceneNum == 1) {
-            document.getElementById("state-name").innerText = "Illinois";
-            document.getElementById("text-content").innerText =
-            "The first case of COVID-19 hit Illinois in February 2020 and the first deaths were in March.          By May of that year, a first wave had peaked, which we will define for our purposes as a rise followed by a drop in deaths of at least 20% relative to the previous month.";
-        }
-        }
-          var sceneNum = 1;
           async function init() {
-            loadText(sceneNum);
+            const stateName = "Illinois";
 
             const parseDate = d3.timeParse("%Y %b");
             const dateFormat = d3.timeFormat("%Y %b");
@@ -48,7 +42,7 @@
                 .append("path")
                 .attr("fill", "none")
                 .attr("stroke", "steelblue")
-                .attr("stroke-width", 1.5)
+                .attr("stroke-width", 4)
                 .attr("d",
                   d3.line()
                     .x(function (d) {return xScale(parseDate(d.Text_Date))})
@@ -78,7 +72,7 @@
       
              const makeAnnotations = d3.annotation()
                 .editMode(false)
-                .notePadding(15)
+                .notePadding(2)
                 .type(type)
                 .annotations(annotations)
       
@@ -86,7 +80,19 @@
                 .append("g")
                 .attr("class", "annotation-group")
                 .call(makeAnnotations);
-            }
+
+             d3.select("svg").append("text")
+                 .attr("x", (width / 2) + margin)
+                 .attr("y", (margin / 2))
+                 .attr("text-anchor", "middle")
+                 .style("font-size", "16px")
+                 .style("text-decoration", "underline")
+                 .text("COVID-19 Deaths in " + stateName + " per month");
+
+
+        }
+
+
             
     </script>
   </body>
