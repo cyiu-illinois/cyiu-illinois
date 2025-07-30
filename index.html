@@ -8,9 +8,25 @@
     <title>Narrative Visualization for CS416</title>
   </head>
   <body onload="init()">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+    <h2>Trends in COVID-19 death data</h2>
+    <p id="text-content" style="text-align:left; width:800px; height:100px"></p>
+    <div class="controls">
+        <form><button>&lt;</button><button>&gt;</button></form>
+    </div>
+    <h4 id="state-name"></h4>
     <svg width="600" height="300"></svg>
+    </div>
+
 
     <script>
+        function loadText(sceneNum, stateAbbr) {
+        if (sceneNum == 1) {
+            document.getElementById("state-name").innerText = "Illinois";
+            document.getElementById("text-content").innerText =
+            "The first case of COVID-19 hit Illinois in February 2020 and the first deaths were in March.          By May of that year, a first wave had peaked, which we will define for our purposes as a rise followed by a drop in deaths of at least 20% relative to the previous month.";
+        }
+        }
           var sceneNum = 1;
           async function init() {
             const parseDate = d3.timeParse("%Y %b");
