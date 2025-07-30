@@ -58,7 +58,35 @@
                 .call(d3.axisLeft(yScale).tickValues(d3.range(0, 25001, 5000)));
               d3.select('svg').append('g').attr('transform','translate(' + margin + ',' + (height + margin) + ')')
                 .call(d3.axisBottom(xScale).ticks(d3.timeMonth.every(12)).tickFormat(d3.timeFormat("%Y-%b")));
+
+              const type = d3.annotationCalloutCircle;
+
+              const annotations = [{
+                note: {
+                    label: "May 2020: 2994",
+                    bgPadding: 2,
+                    title: "First Peak"
+                },
+                x: 78,
+                y: 226,
+                className: "show-bg",
+                dy: -30,
+                dx: 0,
+                subject: { radius: 10, radiusPadding: 0 },
+             }];
+      
+             const makeAnnotations = d3.annotation()
+                .editMode(false)
+                .notePadding(15)
+                .type(type)
+                .annotations(annotations)
+      
+             d3.select("svg")
+                .append("g")
+                .attr("class", "annotation-group")
+                .call(makeAnnotations);
             }
+            
     </script>
   </body>
 </html>
