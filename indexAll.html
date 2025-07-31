@@ -65,7 +65,8 @@
 
           async function init() {
             const urlParams = new URLSearchParams(window.location.search);
-            const stateAbbr = urlParams.get('state');
+            var abbr = urlParams.get('state');
+            if (!abbr) abbr = "IL";
             const stateName = getStateName(abbr);
 
             const parseDate = d3.timeParse("%Y %b");
