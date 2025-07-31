@@ -23,7 +23,7 @@
       <div class="controls">
           <a class="button" href="index2.html">&lt;</a> <a class="button disabled">&gt;</a>
       </div>
-      <svg width="600" height="300"></svg>
+      <svg width="650" height="300"></svg>
       <div class="controls state-controls">
           <a class="button" id="buttonCA" href="indexAll.html?state=CA">CA</a>
           <a class="button" id="buttonTX" href="indexAll.html?state=TX">TX</a>
@@ -73,7 +73,14 @@
             if (!abbr) abbr = "IL";
 
             updateButtons(abbr);
-            const data = await d3.csv(getDataURL(abbr));
+
+            const parseDate = d3.timeParse("%Y %b");
+            var data = await d3.csv(getDataURL(abbr));
+            data.forEach(function (d) {
+              d.dateValue = parseDate(d.Text_Date);
+            });
+
+
             await fetch(getAnnotationURL(abbr))
               .then(function(response) {
                 response.text().then(function(text) {
@@ -84,20 +91,19 @@
 
           function loadGraphAndAnnotations(abbr, data, annotationJSON) {
             const parseDate = d3.timeParse("%Y %b");
-            const dateFormat = d3.timeFormat("%Y %b");
+            const dateFormat = d3.timeFormat("%b %Y");
             const stateName = getStateName(abbr);
 
-            var margin = 50, width = 600 - 2 * margin, height = 300 - 2 * margin;
-
-
-            console.log("annotationJson: ", annotationJSON);
+            var margin = 50, width = 650 - 3 * margin , height = 300 - 2 * margin;
 
             var xScale = d3.scaleTime()
               .domain([parseDate("2020 Mar"), parseDate("2023 Feb")] )
               .range([ 0, width ]);
             var yScale = d3.scaleLinear().domain([0, 25000]).range([height ,0]);
 
-            d3.select('svg').append('g')
+            var svg = d3.select('svg');
+            
+            svg.append('g')
               .attr('transform', 'translate(' + margin + ',' + margin + ')')
               .datum(data)
               .append("path")
@@ -106,31 +112,28 @@
               .attr("stroke-width", 4)
               .attr("d",
                 d3.line()
-                  .x(function (d) {return xScale(parseDate(d.Text_Date))})
+                  .x(function (d) {return xScale(d.dateValue)})
                   .y(function (d) {return yScale(d.Deaths_in_Month)})
               );
 
-            d3.select('svg').append('g').attr('transform','translate(' + margin + ',' + margin + ')')
+            svg.append('g').attr('transform','translate(' + margin + ',' + margin + ')')
               .call(d3.axisLeft(yScale).tickValues(d3.range(0, 25001, 5000)));
-            d3.select('svg').append('g').attr('transform','translate(' + margin + ',' + (height + margin) + ')')
+            svg.append('g').attr('transform','translate(' + margin + ',' + (height + margin) + ')')
               .call(d3.axisBottom(xScale).ticks(d3.timeMonth.every(6)).tickFormat(d3.timeFormat("%Y-%b")));
 
             const type = d3.annotationCalloutCircle;
-            console.log(annotationJSON);
             const annotations = eval(annotationJSON);
-            console.log(annotations);
             const makeAnnotations = d3.annotation()
               .editMode(false)
               .notePadding(2)
               .type(type)
               .annotations(annotations)
       
-            d3.select("svg")
-              .append("g")
+            svg.append("g")
               .attr("class", "annotation-group")
               .call(makeAnnotations);
 
-            d3.select("svg").append("text")
+            svg.append("text")
               .attr("x", (width / 2) + margin)
               .attr("y", (margin / 2))
               .attr("text-anchor", "middle")
@@ -138,6 +141,110 @@
               .style("text-decoration", "underline")
               .text("COVID-19 Deaths in " + stateName + " per month");
 
+            var tooltipG = svg.append("g").attr('transform', 'translate(' + margin + ',' + margin + ')');
+            var focus = tooltipG.append("g").style("display", "none");
+
+
+            // append the x line
+            focus.append("line")
+                .attr("class", "x")
+                .style("stroke", "blue")
+                .style("stroke-dasharray", "3,3")
+                .style("opacity", 0.5)
+                .attr("y1", 0)
+                .attr("y2", height);
+
+            // append the y line
+            focus.append("line")
+                .attr("class", "y")
+                .style("stroke", "blue")
+                .style("stroke-dasharray", "3,3")
+                .style("opacity", 0.5)
+                .attr("x1", width)
+                .attr("x2", width);
+
+
+            focus.append("text")
+              .attr("class", "y1")
+              .style("stroke", "white")
+              .style("stroke-width", "3.5px")
+              .style("opacity", 0.8)
+              .attr("dx", 8)
+              .attr("dy", "-.3em");
+    
+            focus.append("text")
+              .attr("class", "y2")
+              .attr("dx", 8)
+              .attr("dy", "-.3em");
+
+            focus.append("text")
+              .attr("class", "y3")
+              .style("stroke", "white")
+              .style("stroke-width", "3.5px")
+              .style("opacity", 0.8)
+              .attr("dx", 8)
+              .attr("dy", "1em");
+            
+            focus.append("text")
+              .attr("class", "y4")
+              .attr("dx", 8)
+              .attr("dy", "1em");
+    
+            tooltipG.append("rect")
+              .attr("width", width)
+              .attr("height", height)
+              .style("fill", "none")
+              .style("pointer-events", "all")
+              .on("mouseover", function() { focus.style("display", null); })
+              .on("mouseout", function() { focus.style("display", "none"); })
+              .on("mousemove", mousemove);
+
+            var bisectDate = d3.bisector(function(d) { return d.dateValue; }).left;
+
+
+            function mousemove() {
+              var x0 = xScale.invert(d3.mouse(this)[0]),
+                  i = bisectDate(data, x0, 1),
+                  d0 = data[i - 1],
+                  d1 = data[i],
+                  d = x0 - d0.dateValue > d1.dateValue - x0 ? d1 : d0;
+
+              
+              focus.select("text.y1")
+                .attr("transform",
+                      "translate(" + xScale(d.dateValue) + "," + yScale(d.Deaths_in_Month) + ")")
+                .text(dateFormat(d.dateValue));
+
+              focus.select("text.y2")
+                .attr("transform",
+                      "translate(" + xScale(d.dateValue) + "," + yScale(d.Deaths_in_Month) + ")")
+                .text(dateFormat(d.dateValue));
+
+              focus.select("text.y3")
+                .attr("transform",
+                      "translate(" + xScale(d.dateValue) + "," + yScale(d.Deaths_in_Month) + ")")
+                .text(d.Deaths_in_Month);
+
+              focus.select("text.y4")
+                .attr("transform",
+                      "translate(" + xScale(d.dateValue) + "," + yScale(d.Deaths_in_Month) + ")")
+                .text(d.Deaths_in_Month);
+
+		          focus.select(".x")
+                .attr("transform",
+                      "translate(" + xScale(d.dateValue) + "," + yScale(d.Deaths_in_Month) + ")")
+                .attr("y2", height - yScale(d.Deaths_in_Month));
+
+		          focus.select(".y")
+                .attr("transform",
+                      "translate(" + width * -1 + "," +
+		                                 yScale(d.Deaths_in_Month) + ")")
+                .attr("x2", width + width);
+
+
+
+
+            }                                         
 
         }
 
