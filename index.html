@@ -18,7 +18,7 @@
     <div class="controls">
         <a class="button disabled">&lt;</a> <a class="button" href="index2.html">&gt;</a>
     </div>
-    <svg width="600" height="300"></svg>
+    <svg width="650" height="300"></svg>
     </div>
 
 
@@ -28,7 +28,7 @@
 
             const parseDate = d3.timeParse("%Y %b");
             const dateFormat = d3.timeFormat("%Y %b");
-            var margin = 50, width = 600 - 2 * margin, height = 300 - 2 * margin;
+            var margin = 50, width = 650 - 3 * margin, height = 300 - 2 * margin;
             const data = await d3.csv('https://cyiu-illinois.github.io/data/ILMonthlyP1.csv');
 
             var xScale = d3.scaleTime()
@@ -82,7 +82,7 @@
                 .call(makeAnnotations);
 
              d3.select("svg").append("text")
-                 .attr("x", (width / 2) + margin)
+                 .attr("x", (width / 2) + 1.5 * margin)
                  .attr("y", (margin / 2))
                  .attr("text-anchor", "middle")
                  .style("font-size", "16px")
