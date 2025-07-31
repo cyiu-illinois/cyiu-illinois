@@ -1,0 +1,37 @@
+[{
+                note: {
+                  label: "Aug 2020: 5527",
+                  bgPadding: 2,
+                  title: "First Peak"
+                },
+                x: 122,
+                y: 207,
+                className: "show-bg",
+                dy: -55,
+                dx: 0,
+                subject: { radius: 10, radiusPadding: 0 }
+              },{
+                note: {
+                  label: "Jan 2021: 8971",
+                  bgPadding: 2,
+                  title: "Highest Peak"
+                },
+                x: 193,
+                y: 178,
+                className: "show-bg",
+                dy: -30,
+                dx: 40,
+                subject: { radius: 10, radiusPadding: 0 }
+              },{
+                note: {
+                  label: "Nov 2022: 1001",
+                  bgPadding: 2,
+                  title: "Last Peak"
+                },
+                x: 507,
+                y: 242,
+                className: "show-bg",
+                dy: -30,
+                dx: 0,
+                subject: { radius: 10, radiusPadding: 0 }
+              }]

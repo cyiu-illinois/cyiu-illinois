@@ -55,6 +55,10 @@
             }
           }
 
+          function updateButtons(abbr) {
+            document.getElementById("button" + abbr).className = "button disabled";
+          }
+
           function getDataURL(abbr) {
             return "https://cyiu-illinois.github.io/data/" + abbr + "Monthly.csv";
           }
@@ -67,15 +71,26 @@
             const urlParams = new URLSearchParams(window.location.search);
             var abbr = urlParams.get('state');
             if (!abbr) abbr = "IL";
-            const stateName = getStateName(abbr);
 
+            updateButtons(abbr);
+            const data = await d3.csv(getDataURL(abbr));
+            await fetch(getAnnotationURL(abbr))
+              .then(function(response) {
+                response.text().then(function(text) {
+                  loadGraphAndAnnotations(abbr, data, text);
+                });
+              });
+          }
+
+          function loadGraphAndAnnotations(abbr, data, annotationJSON) {
             const parseDate = d3.timeParse("%Y %b");
             const dateFormat = d3.timeFormat("%Y %b");
+            const stateName = getStateName(abbr);
 
             var margin = 50, width = 600 - 2 * margin, height = 300 - 2 * margin;
 
-            const data = await d3.csv(getDataURL(abbr));
-            const annotationJSON = await fetch(getAnnotationURL(abbr));
+
+            console.log("annotationJson: ", annotationJSON);
 
             var xScale = d3.scaleTime()
               .domain([parseDate("2020 Mar"), parseDate("2023 Feb")] )
@@ -101,8 +116,9 @@
               .call(d3.axisBottom(xScale).ticks(d3.timeMonth.every(6)).tickFormat(d3.timeFormat("%Y-%b")));
 
             const type = d3.annotationCalloutCircle;
+            console.log(annotationJSON);
             const annotations = eval(annotationJSON);
-      
+            console.log(annotations);
             const makeAnnotations = d3.annotation()
               .editMode(false)
               .notePadding(2)

@@ -1,0 +1,25 @@
+[{
+                note: {
+                    label: "Apr 2020: 21426",
+                    bgPadding: 2,
+                    title: "First & Highest Peak"
+                },
+                x: 65,
+                y: 79,
+                className: "show-bg",
+                dy: -10,
+                dx: 0,
+                subject: { radius: 10, radiusPadding: 0 }
+             },{
+                note: {
+                  label: "Nov 2022: 4322",
+                  bgPadding: 2,
+                  title: "Last Peak"
+                },
+                x: 507,
+                y: 215,
+                className: "show-bg",
+                dy: -30,
+                dx: 0,
+                subject: { radius: 10, radiusPadding: 0 }
+              }]
